@@ -1,0 +1,5 @@
+﻿Metric,Resnet,,Resnet,
+,cap01,,cap0125,
+,mean,std,mean,std
+CIL,49.27,1.20,51.12,3.91
+TIL,59.00,0.92,66.05,0.88

@@ -1,0 +1,3 @@
+﻿Metric,CIF100 T10 mean,CIF100 T10 std,CIF100 T20 mean,CIF100 T20 std,imagenet T10 mean,imagenet T10 std,imagenet T20 mean,imagenet T20 std
+CIL,59.46,3.69,36.87,3.12,38.16,0.58,26.96,2.31
+TIL,70.23,0.96,67.98,1.54,49.93,0.84,47.29,0.71
