@@ -111,35 +111,6 @@ def compute_kappa_decay(
     return max(k_target, min(k_start, k))
 
 
-def compute_kappa_decay_oldv2(epoch_counter: int,
-                         decay_start: int,
-                         k_start: float,
-                         k_target: float,
-                         epochs_parallel: int,
-                         step_number: int,
-                         steps_per_epoch: int) -> float:
-    """
-    Matches existing schedule logic:
-    - before decay_start: keep k = k_start
-    - afterwards: linear anneal to k_target
-    """
-    if epoch_counter < decay_start:
-        return max(k_target, k_start)
-
-    # avoid negative / div by zero
-    kappa_distance = abs(k_start - k_target)
-
-    denom = max(1, (epochs_parallel - 2 - decay_start))
-
-    prev_alpha = (epoch_counter - decay_start - 1) / denom
-    prev_alpha = min(max(prev_alpha, 0.0), 1.0) * kappa_distance
-
-    epoch_step = (1 / denom) * kappa_distance
-    step_alpha = (step_number / steps_per_epoch) * epoch_step
-
-    k = k_start - prev_alpha - step_alpha
-    return max(k_target, k)
-
 
 def format_per_task(acc_list):
     return "[" + ", ".join(f"{a:.1f}%" for a in acc_list) + "]"
@@ -249,132 +220,6 @@ def compute_conf_stats(model, tasks_data, n_tasks, kappa_targets, device, max_ba
     return mu.detach(), sigma.detach()
 
 
-@torch.no_grad()
-def compute_znorm_fingerprint_stats(
-        model,
-        tasks_data,
-        n_tasks,
-        kappa_targets,
-        device,
-        mu,
-        sigma,
-        max_batches=None,
-        variance_shrinkage=0.2,
-):
-    """
-    Estimate one task-routing fingerprint per task.
-
-    A fingerprint is the mean complete z-score vector produced by batches from
-    a task.  No samples are retained: the returned state consists of T x T
-    means and T diagonal variance terms.
-
-    Returns:
-        prototypes: [T, T], where row k is the mean z-score vector for task k.
-        route_var:  [T], pooled within-task variance for each z coordinate.
-        n_batches:  [T], number of calibration batches used for each task.
-    """
-    if not 0.0 <= variance_shrinkage <= 1.0:
-        raise ValueError("variance_shrinkage must be in [0, 1]")
-
-    model.eval()
-    eps = 1e-8
-    prototypes = torch.zeros(n_tasks, n_tasks, device=device)
-    second_moments = torch.zeros(n_tasks, n_tasks, device=device)
-    n_batches = torch.zeros(n_tasks, device=device)
-
-    for task_id, (loader, _) in enumerate(tasks_data[:n_tasks]):
-        for batch_id, (xb, _) in enumerate(loader):
-            if max_batches is not None and batch_id >= max_batches:
-                break
-
-            xb = xb.to(device, non_blocking=True)
-            confidence = batch_task_confidences(
-                model,
-                xb,
-                n_tasks,
-                kappa_targets,
-            )
-
-            # The evaluator makes one routing decision per homogeneous batch,
-            # so its fingerprint must describe the complete batch-mean vector.
-            z_vector = (
-                (confidence - mu[:, None])
-                / (sigma[:, None] + eps)
-            ).mean(dim=1)
-
-            prototypes[task_id] += z_vector
-            second_moments[task_id] += z_vector.square()
-            n_batches[task_id] += 1
-
-    if torch.any(n_batches == 0):
-        missing = torch.nonzero(
-            n_batches == 0,
-            as_tuple=False,
-        ).flatten().tolist()
-        raise ValueError(
-            "No calibration batches were available for tasks "
-            f"{missing}. Check tasks_data and max_batches."
-        )
-
-    prototypes = prototypes / n_batches[:, None]
-    class_var = (
-        second_moments / n_batches[:, None]
-        - prototypes.square()
-    ).clamp_min(0.0)
-
-    # Pool within-task variance across tasks.  This is substantially more
-    # stable than fitting a separate T-dimensional covariance per task.
-    route_var = (
-        class_var * n_batches[:, None]
-    ).sum(dim=0) / n_batches.sum().clamp_min(1.0)
-
-    positive_var = route_var[route_var > eps]
-    if positive_var.numel():
-        shared_scale = positive_var.median()
-    else:
-        shared_scale = torch.ones((), device=device)
-
-    route_var = (
-        (1.0 - variance_shrinkage) * route_var
-        + variance_shrinkage * shared_scale
-    )
-    route_var = route_var.clamp_min(
-        torch.maximum(
-            shared_scale * 1e-3,
-            torch.tensor(eps, device=device),
-        )
-    )
-
-    return (
-        prototypes.detach(),
-        route_var.detach(),
-        n_batches.detach(),
-    )
-
-
-def _fingerprint_routing_scores(
-        z_vector,
-        prototypes,
-        route_var,
-        direct_weight=0.25,
-):
-    """
-    Return one score per candidate task.
-
-    The first term recognizes the complete cross-gate response pattern.  The
-    second term retains direct evidence from candidate gate k itself.
-    """
-    if direct_weight < 0:
-        raise ValueError("direct_weight must be non-negative")
-
-    difference = z_vector.unsqueeze(0) - prototypes
-    distance = (
-        difference.square() / route_var.unsqueeze(0)
-    ).mean(dim=1)
-
-    candidate_direct_evidence = z_vector
-    return -distance + direct_weight * candidate_direct_evidence
-
 
 @torch.no_grad()
 def eval_CIL_ptKappa_znorm(
@@ -445,25 +290,6 @@ def eval_CIL_ptKappa_znorm(
 
     prototypes = None
     route_var = None
-    calibration_batches = None
-    if norm_mode == "z" and routing_mode == "fingerprint":
-        prototypes, route_var, calibration_batches = (
-            compute_znorm_fingerprint_stats(
-                model,
-                tasks_data,
-                n_tasks=n_tasks,
-                kappa_targets=kappa_targets,
-                device=device,
-                mu=mu,
-                sigma=sigma,
-                max_batches=max_batches,
-                variance_shrinkage=fingerprint_shrinkage,
-            )
-        )
-        print(
-            "Z-fingerprint calibration batches:",
-            calibration_batches.to(torch.long).cpu().tolist(),
-        )
 
     route_confusion = RoutingConfusionMeter(n_tasks)
 
@@ -487,15 +313,7 @@ def eval_CIL_ptKappa_znorm(
                     (confidence - mu[:, None])
                     / (sigma[:, None] + eps)
                 ).mean(dim=1)
-                if routing_mode == "fingerprint":
-                    candidate_scores = _fingerprint_routing_scores(
-                        z_vector,
-                        prototypes,
-                        route_var,
-                        direct_weight=fingerprint_alpha,
-                    )
-                else:
-                    candidate_scores = z_vector
+                candidate_scores = z_vector
             elif norm_mode == "mean_ratio":
                 candidate_scores = (
                     confidence / (mu[:, None] + eps)
@@ -552,15 +370,8 @@ def eval_CIL_ptKappa_znorm(
                     (confidence - mu[:, None])
                     / (sigma[:, None] + eps)
                 ).mean(dim=1)
-                if routing_mode == "fingerprint":
-                    candidate_scores = _fingerprint_routing_scores(
-                        z_vector,
-                        prototypes,
-                        route_var,
-                        direct_weight=fingerprint_alpha,
-                    )
-                else:
-                    candidate_scores = z_vector
+
+                candidate_scores = z_vector
             elif norm_mode == "mean_ratio":
                 candidate_scores = (
                     confidence / (mu[:, None] + eps)
@@ -589,9 +400,6 @@ def eval_CIL_ptKappa_znorm(
         packed_route_confusion.print_report()
 
     return full_model_acc, packed_model_acc
-
-
-
 
 
 def eval_TIL(model: nn.Module, tasks_data, device="cpu", kappa_targets=None, k_decay=0.2, up2task=5):
