@@ -231,4 +231,14 @@ Ablations/kdecay/kappa_ablation_results_summary/
 
 The summarizer reports warnings for incomplete or invalid CSV runs and excludes those runs from the aggregate statistics.
 
+## Restricted review-only materials. 
 
+This repository is not an open-source release. Its contents are provided only for authorized confidential peer review under the terms in LICENSE. Public redistribution, reuse, incorporation into other work, and processing by LLMs or other AI/ML systems are not authorized. All rights, including text-and-data-mining and machine-learning rights, are expressly reserved.
+
+This anonymized repository is provided solely for the confidential evaluation of NeurIPS 2026 Submission 35067.
+
+Permission is granted to assigned NeurIPS reviewers, Area Chairs, Senior Area Chairs, and Program Chairs to access, download, inspect, modify locally, and execute these materials only as necessary for peer review.
+
+This repository is not an open-source release. Except for the limited review permission above and operations necessarily permitted by GitHub’s Terms of Service, no license is granted to redistribute, publish, publicly share, incorporate into other work, use for model training, or otherwise reuse these materials. All rights are reserved.
+
+Reviewers must handle the materials according to the NeurIPS 2026 confidentiality and LLM-review policies. The contents must not be disclosed to or processed by LLMs or other third-party services. Any use of a NeurIPS-sanctioned reviewing tool remains governed by the applicable NeurIPS instructions.
