@@ -11,6 +11,18 @@ Class-IL inference protocol. The reported Class-IL results use the batch-selecti
 
 Exemplar-free scope. Previous-task samples are not replayed to update the backbone or gates. Confidence calibration is label-free and gradient-free and does not modify model parameters. The confidence moments can be computed post hoc from task training loaders; after this pass, only the per-gate scalar moments are retained for evaluation.
 
+## Restricted review-only materials. 
+
+This repository is not an open-source release. Its contents are provided only for authorized confidential peer review under the terms in LICENSE. Public redistribution, reuse, incorporation into other work, and processing by LLMs or other AI/ML systems are not authorized. All rights, including text-and-data-mining and machine-learning rights, are expressly reserved.
+
+This anonymized repository is provided solely for the confidential evaluation of NeurIPS 2026 Submission 35067.
+
+Permission is granted to assigned NeurIPS reviewers, Area Chairs, Senior Area Chairs, and Program Chairs to access, download, inspect, modify locally, and execute these materials only as necessary for peer review.
+
+This repository is not an open-source release. Except for the limited review permission above and operations necessarily permitted by GitHub’s Terms of Service, no license is granted to redistribute, publish, publicly share, incorporate into other work, use for model training, or otherwise reuse these materials. All rights are reserved.
+
+Reviewers must handle the materials according to the NeurIPS 2026 confidentiality and LLM-review policies. The contents must not be disclosed to or processed by LLMs or other third-party services. Any use of a NeurIPS-sanctioned reviewing tool remains governed by the applicable NeurIPS instructions.
+
 ## Repository status
 
 During preparation of the response, we identified that several appendix ablations had been produced at different stages of development, when individual components were tested using different code versions or configurations. To remove these cross-version confounds and enable controlled comparisons, we reran the relevant experiments using one consolidated implementation and the same configuration protocol across methods. Consequently, the newly released standardized-run results may differ from the values in the submitted manuscript but carry the same insights. We report both sets separately: the manuscript values are the originally submitted results, while the released values are the new controlled reruns. We will replace the affected appendix tables with the standardized results in the revised manuscript.
@@ -230,15 +242,3 @@ Ablations/kdecay/kappa_ablation_results_summary/
 ```
 
 The summarizer reports warnings for incomplete or invalid CSV runs and excludes those runs from the aggregate statistics.
-
-## Restricted review-only materials. 
-
-This repository is not an open-source release. Its contents are provided only for authorized confidential peer review under the terms in LICENSE. Public redistribution, reuse, incorporation into other work, and processing by LLMs or other AI/ML systems are not authorized. All rights, including text-and-data-mining and machine-learning rights, are expressly reserved.
-
-This anonymized repository is provided solely for the confidential evaluation of NeurIPS 2026 Submission 35067.
-
-Permission is granted to assigned NeurIPS reviewers, Area Chairs, Senior Area Chairs, and Program Chairs to access, download, inspect, modify locally, and execute these materials only as necessary for peer review.
-
-This repository is not an open-source release. Except for the limited review permission above and operations necessarily permitted by GitHub’s Terms of Service, no license is granted to redistribute, publish, publicly share, incorporate into other work, use for model training, or otherwise reuse these materials. All rights are reserved.
-
-Reviewers must handle the materials according to the NeurIPS 2026 confidentiality and LLM-review policies. The contents must not be disclosed to or processed by LLMs or other third-party services. Any use of a NeurIPS-sanctioned reviewing tool remains governed by the applicable NeurIPS instructions.
