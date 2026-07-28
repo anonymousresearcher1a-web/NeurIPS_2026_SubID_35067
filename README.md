@@ -7,9 +7,15 @@ Official anonymous repository for:
 
 HebbGate is an exemplar-free, single-head class-incremental learning method that learns task-specific channel gates without backpropagating through the gate variables. The gates are updated using a local reward-modulated Hebbian rule that combines activation energy, a margin-based reward, and usage-aware scaling. A κ-decay schedule allows each task to explore a larger subnetwork before consolidating to a sparse task-specific mask.
 
+Class-IL inference protocol. The reported Class-IL results use the batch-selection rule described in Appendix E.3 of the paper. Evaluation batches follow the standard dataset splits and are task-homogeneous. No explicit task identifier or class label is passed to the router. For each batch, all task-conditioned subnetworks are evaluated, their z-normalized confidence scores across batches is used to select the gates. 
+
+Exemplar-free scope. Previous-task samples are not replayed to update the backbone or gates. Confidence calibration is label-free and gradient-free and does not modify model parameters. The confidence moments can be computed post hoc from task training loaders; after this pass, only the per-gate scalar moments are retained for evaluation.
+
 ## Repository status
 
-This repository is a clean, restructured, work-in-progress version of the code associated with submission 35067. The current release contains:
+During preparation of the response, we identified that several appendix ablations had been produced at different stages of development, when individual components were tested using different code versions or configurations. To remove these cross-version confounds and enable controlled comparisons, we reran the relevant experiments using one consolidated implementation and the same configuration protocol across methods. Consequently, the newly released standardized-run results may differ from the values in the submitted manuscript but carry the same insights. We report both sets separately: the manuscript values are the originally submitted results, while the released values are the new controlled reruns. We will replace the affected appendix tables with the standardized results in the revised manuscript.
+
+This repository contains the code and released artifacts associated with submission 35067. The current release contains:
 
 - the main training and evaluation entry points;
 - raw main-result logs for CIFAR-100 and Tiny-ImageNet-200 under 10-task and 20-task streams;
@@ -18,8 +24,6 @@ This repository is a clean, restructured, work-in-progress version of the code a
 - the confidence-statistics checkpoints used by the task-routing evaluation.
 
 The large model-weight checkpoints are hosted separately because they exceed the practical GitHub file-size limit.
-
-> **Work-in-progress note:** 
 
 ## Repository structure
 
