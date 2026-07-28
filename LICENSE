@@ -1,0 +1,94 @@
+RESTRICTED REVIEW-ONLY LICENSE
+NO OPEN-SOURCE LICENSE GRANTED
+
+Copyright (c) 2026 The Authors of NeurIPS Submission 35067.
+All rights reserved.
+
+1. Scope
+
+This license applies to this repository and all associated source code,
+documentation, configurations, experimental results, model parameters,
+checkpoints, and other files (collectively, the "Materials").
+
+The Materials are provided exclusively for confidential peer-review
+evaluation of NeurIPS Submission 35067. Making the Materials accessible does
+not constitute an open-source release and does not grant a license to the
+public.
+
+2. Limited Review Permission
+
+Assigned reviewers, Area Chairs, Senior Area Chairs, Program Chairs, and other
+persons formally authorized to evaluate the submission are granted a limited,
+revocable, non-exclusive, non-transferable permission to access, download,
+inspect, execute, and modify local copies of the Materials solely as necessary
+to evaluate the submission.
+
+This permission does not authorize any other use.
+
+3. Prohibited Uses
+
+Except for the limited permission in Section 2, rights necessarily granted by
+the terms of the hosting service, rights expressly granted under applicable
+conference submission terms, or uses that cannot lawfully be restricted, no
+person may:
+
+(a) copy, redistribute, publish, mirror, sublicense, sell, or publicly share
+    the Materials or any substantial part of them;
+
+(b) incorporate the Materials into another project, publication, product,
+    dataset, benchmark, or derivative work;
+
+(c) use the Materials for commercial purposes or for research unrelated to
+    the confidential evaluation of the submission;
+
+(d) provide, upload, transmit, disclose, or otherwise expose the Materials to
+    any large language model, generative-AI system, machine-learning model,
+    autonomous agent, hosted code-analysis service, or other external
+    automated processing system;
+
+(e) use the Materials for model training, fine-tuning, evaluation,
+    benchmarking, inference, retrieval-augmented generation, embedding
+    generation, dataset construction, or text-and-data mining; or
+
+(f) use the Materials, their implementation details, or their results in
+    another person's work before a public release carrying an appropriate
+    license.
+
+All permissions for machine learning, artificial intelligence, and
+text-and-data mining are expressly reserved to the maximum extent permitted by
+applicable law.
+
+4. Confidentiality
+
+Authorized reviewers must handle the Materials in accordance with all
+applicable peer-review confidentiality requirements. For NeurIPS reviewers and
+committee members, these restrictions apply in addition to the applicable
+NeurIPS confidentiality, code-of-conduct, and LLM-use policies.
+
+Nothing in this license instructs or restricts an authorized evaluator as to
+the substance, conclusions, or outcome of their evaluation.
+
+5. No Implied Rights
+
+No patent, copyright, trademark, trade-secret, or other intellectual-property
+license is granted except for the limited review permission stated in
+Section 2. All rights not expressly granted are reserved.
+
+6. Termination
+
+The limited permission granted by this license terminates automatically upon
+any breach. Upon termination, the recipient must stop using the Materials and
+delete any retained copies, except where retention is required by an
+authorized conference system or applicable law.
+
+7. Disclaimer
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT
+OF, OR IN CONNECTION WITH THE MATERIALS OR THEIR USE.
+
+Additional permission may be granted only through explicit written
+authorization from the copyright holders. During anonymous review, permission
+requests must be made through an official conference communication channel.
