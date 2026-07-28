@@ -1,3 +1,0 @@
-﻿Metric,dynamic Resnet cap01 mean,dynamic Resnet cap01 std,dynamic Resnet cap0125 mean,dynamic Resnet cap0125 std,static Resnet cap01 mean,static Resnet cap01 std,static Resnet cap0125 mean,static Resnet cap0125 std
-CIL,59.46,3.69,49.82,1.31,49.27,1.20,51.12,3.91
-TIL,70.23,0.96,66.30,1.22,59.00,0.92,66.05,0.88
