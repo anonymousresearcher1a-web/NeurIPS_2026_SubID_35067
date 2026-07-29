@@ -234,6 +234,12 @@ Generate their summaries with:
 ```bash
 python Ablations/summarize_kappa_results.py Ablations/kdecay
 ```
+### ResNet-18: κ-decay vs. Static-κ
+
+| Metric | κ-decay, κ = 0.10 | κ-decay, κ = 0.125 | Static-κ, κ = 0.10 | Static-κ, κ = 0.125 |
+|:------:|------------------:|--------------------:|-------------------:|---------------------:|
+| CIL | 59.46 ± 3.69 | 49.82 ± 1.31 | 49.27 ± 1.20 | 51.12 ± 3.91 |
+| TIL | 70.23 ± 0.96 | 66.30 ± 1.22 | 59.00 ± 0.92 | 66.05 ± 0.88 |
 
 The generated files are written to:
 
