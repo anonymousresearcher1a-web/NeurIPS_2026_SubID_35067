@@ -228,8 +228,8 @@ def train_tasks(
                 test_loss = valid_loss(model, train_loader, t_idx, k_decay, device)
 
                 lr = model.lr
-                if test_loss < best_loss:
-                    best_loss = test_loss
+                if train_loss < best_loss:
+                    best_loss = train_loss
                     best_model = get_model(model)
                     patience = model.lr_patience
                     # print(' *',end='')
