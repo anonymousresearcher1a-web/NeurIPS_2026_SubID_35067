@@ -225,7 +225,7 @@ def train_tasks(
                 train_loss = float(sum(losses) / max(1, len(losses)))
 
                 # ----------------- Validation loss -----------------
-                test_loss = valid_loss(model, train_loader, t_idx, k_decay, device)
+                test_loss = valid_loss(model, test_loader, t_idx, k_decay, device)
 
                 lr = model.lr
                 if train_loss < best_loss:
